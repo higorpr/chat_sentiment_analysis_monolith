@@ -1,0 +1,7 @@
+pandas
+emoji
+leia-br
+pymongo
+vaderSentiment
+reportlab
+boto3
