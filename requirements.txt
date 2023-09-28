@@ -5,3 +5,5 @@ pymongo
 vaderSentiment
 reportlab
 boto3
+Flask
+python-dotenv

@@ -2,12 +2,18 @@ import pandas as pd
 import emoji
 import boto3
 
-from errors import InexistantChat, VoidChatHistory, NoClientMessages, S3UploadError
-from connection import messages_db, chats_db
+from app.exceptions.errors import (
+    InexistantChat,
+    VoidChatHistory,
+    NoClientMessages,
+    S3UploadError,
+)
+from app.database.connection import messages_db, chats_db
 from bson.objectid import ObjectId
 from io import BytesIO
 from LeIA import SentimentIntensityAnalyzer as LeiaAnalyzer
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as EmojiAnalyzer
+from app.database.s3_connection import s3_bucket
 
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import (
@@ -39,7 +45,9 @@ def get_chat_messages(chat_id: str):
     messages = list(messages)
 
     if len(messages) < 3:
-        raise VoidChatHistory("Chat não tem mensagens suficientes para uma análise de sentimento")
+        raise VoidChatHistory(
+            "Chat não tem mensagens suficientes para uma análise de sentimento"
+        )
 
     return messages
 
@@ -392,7 +400,7 @@ def create_report(formated_chat: list, sentiment_coef: float):
     return pdf_buffer
 
 
-def update_file_to_s3(data, s3_bucket, s3_path):
+def update_file_to_s3(data, s3_path):
     s3 = boto3.client("s3")
     try:
         s3.upload_fileobj(data, s3_bucket, s3_path)
