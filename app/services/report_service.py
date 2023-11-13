@@ -30,10 +30,11 @@ class ReportService:
 
     def get_chat_id(self, account_id: str, wa_chat_id: str):
         chat_entries = self.report_repository.get_chat_id(account_id, wa_chat_id)
-        if chat_entries == None:
+        
+        if len(chat_entries) == 0:
             raise InexistantChat("Chat não encontrado")
 
-        chat_entry = list(chat_entries)[0]
+        chat_entry = chat_entries[0]
         chat_id = chat_entry["_id"]
         return chat_id
 

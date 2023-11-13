@@ -10,6 +10,8 @@ class ReportRepository:
     def get_chat_id(self, account_id: str, wa_chat_id: str):
         query = {"account": ObjectId(account_id), "wa_chat_id": wa_chat_id}
         output = self.chat_collection.find(query)
+        # This conversion is here to be able to know if the query returned any results
+        output = list(output)
         return output
 
     def get_chat_messages(self, chat_id: str):
